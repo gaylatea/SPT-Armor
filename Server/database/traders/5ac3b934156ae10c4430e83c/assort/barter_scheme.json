@@ -1,0 +1,66 @@
+{
+    "basic_slick_carrier": [
+        [
+            {
+                "count": 54109,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_2_Aramid": [
+        [
+            {
+                "count": 44802,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_3_ArmoredSteel": [
+        [
+            {
+                "count": 67203,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_4_ArmoredSteel": [
+        [
+            {
+                "count": 112005,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_4_Ceramic": [
+        [
+            {
+                "count": 112005,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_5_ArmoredSteel": [
+        [
+            {
+                "count": 224010,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_5_UHMWPE": [
+        [
+            {
+                "count": 224010,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_6_ArmoredSteel": [
+        [
+            {
+                "count": 470421,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ]
+}

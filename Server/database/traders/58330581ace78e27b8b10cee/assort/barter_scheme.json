@@ -1,0 +1,26 @@
+{
+    "armor_plate_vi_thorax_2_Aramid": [
+        [
+            {
+                "count": 60482,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_stomach_2_Aramid": [
+        [
+            {
+                "count": 33480,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_5_Ceramic": [
+        [
+            {
+                "count": 347215,
+                "_tpl": "5449016a4bdc2d6f028b456f"
+            }
+        ]
+    ]
+}

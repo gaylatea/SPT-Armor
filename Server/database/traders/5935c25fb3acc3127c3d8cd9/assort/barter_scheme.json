@@ -1,0 +1,58 @@
+{
+    "armor_plate_vi_thorax_3_UHMWPE": [
+        [
+            {
+                "count": 648.45,
+                "_tpl": "5696686a4bdc2da3298b456a"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_4_Combined": [
+        [
+            {
+                "count": 1080.75,
+                "_tpl": "5696686a4bdc2da3298b456a"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_5_UHMWPE": [
+        [
+            {
+                "count": 2161.5,
+                "_tpl": "5696686a4bdc2da3298b456a"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_5_ArmoredSteel": [
+        [
+            {
+                "count": 3371.9,
+                "_tpl": "5696686a4bdc2da3298b456a"
+            }
+        ]
+    ],
+    "armor_plate_vi_thorax_6_UHMWPE": [
+        [
+            {
+                "count": 4539.15,
+                "_tpl": "5696686a4bdc2da3298b456a"
+            }
+        ]
+    ],
+    "armor_plate_vi_stomach_6_Combined": [
+        [
+            {
+                "count": 2512.63,
+                "_tpl": "5696686a4bdc2da3298b456a"
+            }
+        ]
+    ],
+    "armor_plate_vi_arms_2_Aramid": [
+        [
+            {
+                "count": 203.52,
+                "_tpl": "5696686a4bdc2da3298b456a"
+            }
+        ]
+    ]
+}

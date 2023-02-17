@@ -1,0 +1,32 @@
+[
+    {
+        "_id": "armor_plate_vi_thorax_2_Aramid",
+        "_tpl": "armor_plate_vi_thorax_2_Aramid",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_stomach_2_Aramid",
+        "_tpl": "armor_plate_vi_stomach_2_Aramid",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_5_Ceramic",
+        "_tpl": "armor_plate_vi_thorax_5_Ceramic",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    }
+]

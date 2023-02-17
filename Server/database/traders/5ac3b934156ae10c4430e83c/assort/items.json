@@ -1,0 +1,82 @@
+[
+    {
+        "_id": "basic_slick_carrier",
+        "_tpl": "5e4abb5086f77406975c9342",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_2_Aramid",
+        "_tpl": "armor_plate_vi_thorax_2_Aramid",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_3_ArmoredSteel",
+        "_tpl": "armor_plate_vi_thorax_3_ArmoredSteel",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_4_ArmoredSteel",
+        "_tpl": "armor_plate_vi_thorax_4_ArmoredSteel",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_4_Ceramic",
+        "_tpl": "armor_plate_vi_thorax_4_Ceramic",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_5_ArmoredSteel",
+        "_tpl": "armor_plate_vi_thorax_5_ArmoredSteel",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_5_UHMWPE",
+        "_tpl": "armor_plate_vi_thorax_5_UHMWPE",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    },
+    {
+        "_id": "armor_plate_vi_thorax_6_ArmoredSteel",
+        "_tpl": "armor_plate_vi_thorax_6_ArmoredSteel",
+        "parentId": "hideout",
+        "slotId": "hideout",
+        "upd": {
+            "UnlimitedCount": true,
+            "StackObjectsCount": 999999
+        }
+    }
+]
