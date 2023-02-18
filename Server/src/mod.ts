@@ -2,6 +2,7 @@ import { container, DependencyContainer, inject, injectable } from "tsyringe";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
 import { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
+import { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
 import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
 import { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
 import { JsonUtil } from "@spt-aki/utils/JsonUtil";
@@ -10,17 +11,22 @@ import { ImporterUtil } from "@spt-aki/utils/ImporterUtil";
 import { ITemplateItem, Props, Slot } from "@spt-aki/models/eft/common/tables/ITemplateItem";
 import { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
 
+// Needed for monkeypatching base class support for pre-3.5.1 servers.
+import { ItemBaseClassService } from "@spt-aki/services/ItemBaseClassService";
+import { BotEquipmentModGenerator } from "@spt-aki/generators/BotEquipmentModGenerator";
+
 import merge from "lodash.merge";
 import { basename, dirname } from "path";
 
-import {config, CarrierDefault} from "./config";
+import { config, CarrierDefault } from "./config";
 
 const PLATE_THORAX_BASE_ITEM = "armor_plate_thorax";
 const PLATE_STOMACH_BASE_ITEM = "armor_plate_stomach";
 const PLATE_ARMS_BASE_ITEM = "armor_plate_arms";
 
+
 @injectable()
-class Armor implements IPostDBLoadMod {
+class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
     constructor(
         @inject("DatabaseServer") protected dbServer: DatabaseServer,
         @inject("JsonUtil") protected jsonUtil: JsonUtil,
@@ -28,9 +34,35 @@ class Armor implements IPostDBLoadMod {
         @inject("ImporterUtil") protected importer: ImporterUtil,
         @inject("PreAkiModLoader") protected modLoader: PreAkiModLoader,
         @inject("ConfigServer") protected configServer: ConfigServer,
+
+        // Needed for monkeypatching base class support for pre-3.5.1 servers.
+        @inject("ItemBaseClassService") protected baseClassService: ItemBaseClassService,
     ) { }
 
-    public postDBLoad(container: DependencyContainer) {
+    // These steps are needed because until 3.5.1 lands, the mod generation code
+    // will refuse to consider base classes for equipment filters.
+    //
+    // See https://dev.sp-tarkov.com/SPT-AKI/Server/pulls/3186 for more details.
+    // Once that is released, I can remove this code.
+    public preAkiLoad(container: DependencyContainer) {
+        container.afterResolution("BotEquipmentModGenerator", (_t, result: BotEquipmentModGenerator) => 
+        {
+            const originalFn = result["isModValidForSlot"].bind(result);
+            result["isModValidForSlot"] = (modToAdd: [boolean, ITemplateItem],
+                itemSlot: Slot,
+                modSlot: string,
+                parentTemplate: ITemplateItem): boolean => {
+                    const originalValidCheck = originalFn(modToAdd, itemSlot, modSlot, parentTemplate);
+                    if(!originalValidCheck) {
+                        return this.baseClassService.itemHasBaseClass(modToAdd[1]._id, itemSlot._props.filters[0].Filter);
+                    }
+
+                    return originalValidCheck;
+                };
+        }, {frequency: "Always"});
+    }
+
+    public postDBLoad(_container: DependencyContainer) {
         const serverDB = this.dbServer.getTables();
 
         const modName = basename(dirname(__dirname.split('/').pop()));
