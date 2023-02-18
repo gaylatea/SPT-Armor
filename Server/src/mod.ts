@@ -11,12 +11,12 @@ import { ImporterUtil } from "@spt-aki/utils/ImporterUtil";
 import { ITemplateItem, Props, Slot } from "@spt-aki/models/eft/common/tables/ITemplateItem";
 import { IAirdropConfig } from "@spt-aki/models/spt/config/IAirdropConfig";
 
+import merge from "lodash.merge";
+import { basename, dirname } from "path";
+
 // Needed for monkeypatching base class support for pre-3.5.1 servers.
 import { ItemBaseClassService } from "@spt-aki/services/ItemBaseClassService";
 import { BotEquipmentModGenerator } from "@spt-aki/generators/BotEquipmentModGenerator";
-
-import merge from "lodash.merge";
-import { basename, dirname } from "path";
 
 import { config, CarrierDefault } from "./config";
 
@@ -25,6 +25,11 @@ const PLATE_STOMACH_BASE_ITEM = "armor_plate_stomach";
 const PLATE_ARMS_BASE_ITEM = "armor_plate_arms";
 
 
+/**
+ * The Armor Mod hooks into the generation of plate carrier items and makes them
+ * compatible with removable plates, allowing for both a wider variation on
+ * armor values seen in the game, as well as potential resupply in the field.
+ */
 @injectable()
 class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
     constructor(
@@ -34,16 +39,15 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
         @inject("ImporterUtil") protected importer: ImporterUtil,
         @inject("PreAkiModLoader") protected modLoader: PreAkiModLoader,
         @inject("ConfigServer") protected configServer: ConfigServer,
-
-        // Needed for monkeypatching base class support for pre-3.5.1 servers.
-        @inject("ItemBaseClassService") protected baseClassService: ItemBaseClassService,
     ) { }
 
-    // These steps are needed because until 3.5.1 lands, the mod generation code
-    // will refuse to consider base classes for equipment filters.
-    //
-    // See https://dev.sp-tarkov.com/SPT-AKI/Server/pulls/3186 for more details.
-    // Once that is released, I can remove this code.
+    /**
+     * This hook is needed because until 3.5.1 lands, the mod generation code
+     * will refuse to consider base classes for equipment filters.
+     *
+     * See https://dev.sp-tarkov.com/SPT-AKI/Server/pulls/3186 for more details.
+     * Once that is released, I can remove this code.
+     */
     public preAkiLoad(container: DependencyContainer) {
         container.afterResolution("BotEquipmentModGenerator", (_t, result: BotEquipmentModGenerator) => 
         {
@@ -52,9 +56,11 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
                 itemSlot: Slot,
                 modSlot: string,
                 parentTemplate: ITemplateItem): boolean => {
+                    const baseClassService = container.resolve<ItemBaseClassService>("ItemBaseClassService");
+
                     const originalValidCheck = originalFn(modToAdd, itemSlot, modSlot, parentTemplate);
                     if(!originalValidCheck) {
-                        return this.baseClassService.itemHasBaseClass(modToAdd[1]._id, itemSlot._props.filters[0].Filter);
+                        return baseClassService.itemHasBaseClass(modToAdd[1]._id, itemSlot._props.filters[0].Filter);
                     }
 
                     return originalValidCheck;
@@ -68,11 +74,14 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
         const modName = basename(dirname(__dirname.split('/').pop()));
         const modDB: any = this.importer.loadRecursive(`user/mods/${modName}/database/`);
 
-        merge(serverDB, modDB.db);
+        Object.assign(serverDB.templates.items, modDB.db.templates.items);
+        Object.assign(serverDB.templates.handbook.Items, modDB.db.templates.handbook.Items);
+        Object.assign(serverDB.templates.prices, modDB.db.templates.prices);
+        Object.assign(serverDB.locales.global["en"], modDB.db.locales.global["en"]);
         this.logger.success("[Armor] Plates are now available for use in carriers.");
 
-        // TODO(gaylatea): Make this a little more flexible.
-        for(const trader of ["58330581ace78e27b8b10cee", "5935c25fb3acc3127c3d8cd9", "5ac3b934156ae10c4430e83c"]) {
+
+        for(const trader in modDB.traders) {
             Object.assign(serverDB.traders[trader].assort.barter_scheme, modDB.traders[trader].assort.barter_scheme);
             Object.assign(serverDB.traders[trader].assort.loyal_level_items, modDB.traders[trader].assort.loyal_level_items);
             serverDB.traders[trader].assort.items.push(...modDB.traders[trader].assort.items);
@@ -91,6 +100,15 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
         airConf.loot.itemTypeWhitelist.push("armor_plate");
     }
 
+    /**
+     * Constructs the right plate ID for bosses to keep their default plates
+     * when they are equipped with armor.
+     * 
+     * @param slot What slot the armor is for.
+     * @param kind What material and class the armor should generate with.
+     * 
+     * @returns An item ID usable for bot generation.
+     */
     private mkDefaultCarrierPlateID(slot: string, kind: CarrierDefault): string {
         return `armor_plate_vi_${slot}_${kind.defaultArmorClass}_${kind.defaultArmorMaterial}`;
     }
@@ -98,7 +116,12 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
     /**
      * Allow an item to equip plates, both for players and for bots.
      * 
-     * @param carrier An item to enable plate support on.
+     * @param carrier           An item loaded from the DB that will be modified.
+     * @param hasStomachSlot    Should stomach armor be enabled?
+     * @param hasArmsSlot       Should arm armor be enabled?
+     * @param defaults          What should a boss wearing this armor be equipped with?
+     * 
+     * @returns The modified armor item, which is added to the DB for you.
      */
     public enablePlates(carrier: ITemplateItem, hasStomachSlot: boolean, hasArmsSlot: boolean, defaults: CarrierDefault): ITemplateItem {
         const db = this.dbServer.getTables();
@@ -153,6 +176,10 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
         return carrier;
     }
 
+    /**
+     * Changes each carrier item to reflect that it no longer has plates
+     * installed by default.
+     */
     private tweakVanillaCarriers() {
         const database = this.dbServer.getTables();
 
@@ -181,6 +208,16 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
         });
     }
 
+    /**
+     * Constructs a slot item suitable for a plate carrier.
+     * 
+     * @param id           What carrier to enable the slot on.
+     * @param mod          Internal ID of the slot.
+     * @param name         The name of the slot.
+     * @param allowedItems What item parent IDs are allowed to be equipped.
+     * 
+     * @returns A correctly formatted slot that can be added to the carrier item.
+     */
     private mkCarrierSlot(id: string, mod: string, name: string, allowedItems: string[]): Slot {
         return {
             _name: `mod_equipment${mod}`,

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <AssemblyName>Gaylatea-SPTPlates</AssemblyName>
+    <AssemblyName>Gaylatea-Armor</AssemblyName>
     <Copyright>© 2023 Aria Jones</Copyright>
   </PropertyGroup>
 

@@ -38,6 +38,8 @@ export const config = {
         ],
     },
 
+    // Only these carriers will be modified at load time, by the mod, to
+    // be compatible with the plates system.
     vanillaPlateCarriers: {
         "5c0e655586f774045612eeb2": {
             defaultArmorClass: 4,

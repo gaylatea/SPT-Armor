@@ -5488,6 +5488,26 @@
         "handbook": {
             "Items": [
                 {
+                    "Id": "armor_plate",
+                    "ParentId": "5b5f704686f77447ec5d76d7",
+                    "Price": 0
+                },
+                {
+                    "Id": "armor_plate_stomach",
+                    "ParentId": "5b5f704686f77447ec5d76d7",
+                    "Price": 0
+                },
+                {
+                    "Id": "armor_plate_thorax",
+                    "ParentId": "5b5f704686f77447ec5d76d7",
+                    "Price": 0
+                },
+                {
+                    "Id": "armor_plate_arms",
+                    "ParentId": "5b5f704686f77447ec5d76d7",
+                    "Price": 0
+                },
+                {
                     "Id": "armor_plate_vi_arms_4_Aluminium",
                     "ParentId": "5b5f704686f77447ec5d76d7",
                     "Price": 52740
