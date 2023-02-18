@@ -71,7 +71,12 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
         merge(serverDB, modDB.db);
         this.logger.success("[Armor] Plates are now available for use in carriers.");
 
-        merge(serverDB.traders, modDB.traders);
+        // TODO(gaylatea): Make this a little more flexible.
+        for(const trader of ["58330581ace78e27b8b10cee", "5935c25fb3acc3127c3d8cd9", "5ac3b934156ae10c4430e83c"]) {
+            Object.assign(serverDB.traders[trader].assort.barter_scheme, modDB.traders[trader].assort.barter_scheme);
+            Object.assign(serverDB.traders[trader].assort.loyal_level_items, modDB.traders[trader].assort.loyal_level_items);
+            serverDB.traders[trader].assort.items.push(...modDB.traders[trader].assort.items);
+        }
         this.logger.success("[Armor] Trader deals for plates have been added.")
 
         this.tweakVanillaCarriers();
