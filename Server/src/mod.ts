@@ -75,7 +75,7 @@ class Armor implements IPreAkiLoadMod, IPostDBLoadMod {
         const modDB: any = this.importer.loadRecursive(`user/mods/${modName}/database/`);
 
         Object.assign(serverDB.templates.items, modDB.db.templates.items);
-        Object.assign(serverDB.templates.handbook.Items, modDB.db.templates.handbook.Items);
+        serverDB.templates.handbook.Items.push(...modDB.db.templates.handbook.Items);
         Object.assign(serverDB.templates.prices, modDB.db.templates.prices);
         Object.assign(serverDB.locales.global["en"], modDB.db.locales.global["en"]);
         this.logger.success("[Armor] Plates are now available for use in carriers.");
