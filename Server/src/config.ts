@@ -133,6 +133,18 @@ export const config = {
             defaultArmorClass: 4,
             defaultArmorMaterial: "UHMWPE",
         }, // Shellback Tactical Banshee plate carrier (A-Tacs AU)
+        "5b44d0de86f774503d30cba8": {
+            defaultArmorClass: 4,
+            defaultArmorMaterial: "Titan",
+        }, // IOTV Gen4 body armor (high mobility kit)
+        "5b44cf1486f77431723e3d05": {
+            defaultArmorClass: 5,
+            defaultArmorMaterial: "Titan",
+        }, // IOTV Gen4 body armor (assault kit)
+        "5b44cd8b86f774503d30cba2": {
+            defaultArmorClass: 5,
+            defaultArmorMaterial: "Titan",
+        }, // IOTV Gen4 body armor (full protection)
     } as Record<string, CarrierDefault>,
 };
 
